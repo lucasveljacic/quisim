@@ -1,0 +1,62 @@
+{
+    "database":                 {
+        "connections":              {
+            "dev":                      {
+                "username":                 "root",
+                "password":                 "toor",
+                "driver":                   "mysql",
+                "sid":                      "mysql:host=127.0.0.1;dbname=quiniela;charset=utf8mb4",
+                "vendor":                   "pdo"
+            }
+        }
+    },
+    "loggers":                      {
+        "default":                      {
+            "type":                         "file",
+            "channels":                     ["app"]
+        },
+        "default-dev":              {
+            "type":                         "file",
+            "channels":                     ["app"],
+            "dataProviders":                [
+                "memoryConsumption",
+                "elapsedTime",
+                "request"
+            ]
+        },
+        "default-errors":           {
+            "type":                         "file",
+            "level":                        "ERROR",
+            "channels":                     ["app"]
+        },
+        "database":                     {
+            "type":                         "file",
+            "channels":                     ["database"]
+        },
+        "database-errors":              {
+            "type":                         "file",
+            "level":                        "ERROR",
+            "channels":                     ["database"]
+        },
+        "quiniela":              {
+            "type":                         "file",
+            "channels":                     ["quiniela"]
+        }
+    },
+    "loterias": {
+        "nacional" : 1,
+        "provincia" : 2,
+        "santa_fe" : 3,
+        "montevideo" : 4,
+        "cordoba" : 5,
+        "CORDOBA" : 5,
+        "entre_rios" : 6
+    },
+    "sorteos": {
+        "primera" : 1,
+        "matutino" : 2,
+        "vespertino" : 3,
+        "nocturno" : 4
+    },
+    "inicioSimulaciones": "2007-3-13"
+}

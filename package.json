@@ -1,0 +1,9 @@
+{
+  "name": "quinielatest",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "highcharts": "^4.2.3",
+    "jquery": "^2.2.1"
+  }
+}

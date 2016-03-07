@@ -1,0 +1,10 @@
+.idea
+vendor
+build/artifacts
+composer.lock
+logs/*
+tmp/*
+data/*
+cache/*
+docker/*
+vendor/*

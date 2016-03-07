@@ -1,0 +1,28 @@
+{
+    "name": "lveljacic\/testquiniela",
+    "description": "Simualacion Quiniela",
+    "version": "1.0.0",
+    "type": "proyecto",
+    "require": {
+        "php": ">=5.3",
+        "intraway/common-lg":                               "1.9.*"
+
+    },
+    "autoload":{
+        "psr-0":{
+            "Quiniela_":"src\/",
+            "Test_Quiniela_":"test\/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://phpackages.intraway.com"
+        },
+        {
+            "type": "composer",
+            "url": "http:\/\/gitlab.intraway.com:8080\/iwc\/web"
+        }
+    ],
+    "minimum-stability": "dev"
+}

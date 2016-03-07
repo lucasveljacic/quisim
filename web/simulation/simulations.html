@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../node_modules/highcharts/highcharts.js"></script>
+
+<script>
+
+    var plots = {
+        1: {
+            seriesOptions: [],
+            seriesCounter: 0,
+            names: ['invest', 'profit']
+        },
+        profit_per_year: {
+            seriesOptions: [],
+            seriesCounter: 0,
+            names: ['investAcum', 'incomeAcum', 'profitAcum']
+        }
+    };
+
+    $(function () {
+
+        $.each(plots, function(plotKey, plot) {
+            $.each(plot.names, function(key, name) {
+                console.log(key + ": " + name);
+            });
+        });
+
+        $.each(plots, function(plotKey, plot) {
+
+            $.each(plot.names, function(i, name) {
+                $.ajax({
+                    resourceId: "text",
+                    url: "simulation.php",
+                    data: {
+                        sid: 19,
+                        resourceId: name
+                    },
+                    success: function(rawText) {
+                        dataJson = eval(rawText);
+
+                        plots[plotKey].seriesOptions[i] = {
+                            name: name,
+                            data: dataJson
+                        };
+
+                        // As we're loading the data asynchronously, we don't know what order it will arrive. So
+                        // we keep a counter and create the chart when all the data is loaded.
+                        plots[plotKey].seriesCounter += 1;
+
+                        if (plot.seriesCounter === plot.names.length) {
+                            createChart(plotKey);
+                        }
+                    }
+                });
+            });
+
+        });
+    });
+
+
+    /**
+     * Create the chart when all data is loaded
+     * @returns {undefined}
+     */
+    function createChart(plotName) {
+
+        $('#container_'+plotName).highcharts({
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Monthly Average Temperature',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com',
+                x: -20
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Pesos $'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valuePrefix: '$'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+
+            series: plots[plotName].seriesOptions
+        });
+    }
+
+</script>
+
+</head>
+<body>
+
+<div id="container_1" style="width:80%; height:400px;"></div>
+<div id="container_profit_per_year" style="width:80%; height:400px;"></div>
+<div id="container_profit_per_month" style="width:80%; height:400px"></div>
+
+
+</body>
+</html>
