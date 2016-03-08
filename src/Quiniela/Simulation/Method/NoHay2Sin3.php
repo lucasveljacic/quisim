@@ -9,7 +9,8 @@ class Quiniela_Simulation_Method_NoHay2Sin3 extends Quiniela_Simulation_Base
 
     public function getDescription()
     {
-        $desc = "Metodo: Tomar los repetidos por unica vez en los ultimos 67 sorteos y armar redoblonas con las combinaciones\n";
+        $desc = "Metodo: Tomar los repetidos por unica vez en los ultimos 67 sorteos y armar ".
+            "redoblonas con las combinaciones\n";
         $desc .= "Args: ".print_r($this->getArguments(), 1);
         return $desc;
     }
@@ -30,7 +31,7 @@ class Quiniela_Simulation_Method_NoHay2Sin3 extends Quiniela_Simulation_Base
             /**
              * obtenemos los numeros que se repitieron 2 veces en los ultimos 67 sorteos.
              */
-            $numeros = $this->calcularNumeros2VecesEnUltimas67($date, $loteriaId);
+            $numeros = $this->calcularRepetidosUnaVezEnUltimosNSorteos($date, $loteriaId, 68);
 
             $this->logger->debug("numeros encontrados: ".implode(' - ', $numeros));
 

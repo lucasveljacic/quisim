@@ -201,18 +201,82 @@ SQL;
         return ($salioCabeza && $salioPremios);
     }
 
-    function calcularNumeros2VecesEnUltimas67($date, $loteriaId)
+    function esGanador($numero, $posicion, $fecha, $loteriaId, $sorteoId)
     {
         $sql = <<<SQL
-            select numero
+            select *
               from sorteo_numero
              where 1=1
+               and posicion = :posicion
+               and fecha = :fecha
+               and mod(numero_completo, :modulo) = :numero
+               and sorteo_id = :sorteoId
                and loteria_id = :loteriaId
-               and posicion = 1
-               and fecha > DATE_SUB(:date, INTERVAL 30 DAY)
-               and fecha < :date
-             group by loteria_id, numero
-            having count(numero) = 2
+SQL;
+        $bnd = array(
+            'fecha' => $fecha,
+            'modulo' => 10 * strlen($numero),
+            'numero' => $numero,
+            'loteriaId' => $loteriaId,
+            'sorteoId' => $sorteoId,
+            'posicion' => $posicion,
+        );
+
+        $res = $this->dbConn->executeRead($sql, $bnd);
+        //$this->logger->debug(print_r($sql, 1));
+        //$this->logger->debug(print_r($bnd, 1));
+
+        return (count($res) == 1);
+    }
+
+    public function calcularAtrasadosEnUltimosNSorteos($date, $loteriaId, $cantSorteos, $responseCant, $digits = 1)
+    {
+        $cantSorteos = (int) $cantSorteos;
+        $digits = (int) $digits;
+        $mod = pow(10, $digits);
+
+        $sql = <<<SQL
+
+        	select mod(t.numero, $mod) as numero
+              from (
+                 select numero, fecha
+                   from sorteo_numero
+				  where fecha < :date
+                    and posicion = 1
+                    and loteria_id = :loteriaId
+                  order by fecha desc, sorteo_id desc
+                  limit $cantSorteos
+                  ) t
+             group by mod(t.numero, $mod)
+             order by max(t.fecha) asc
+SQL;
+        $bnd = array(
+            'date' => $date,
+            'loteriaId' => $loteriaId,
+        );
+
+        $res = $this->dbConn->executeRead($sql, $bnd);
+
+        return array_slice($res, 0, $responseCant);
+    }
+
+    function calcularRepetidosUnaVezEnUltimosNSorteos($date, $loteriaId, $n = 67)
+    {
+        $n = (int) $n;
+
+        $sql = <<<SQL
+            select t.numero
+              from (
+                 select numero
+                   from sorteo_numero
+				  where fecha < :date
+                    and posicion = 1
+                    and loteria_id = :loteriaId
+                  order by fecha desc, sorteo_id desc
+                  limit $n
+                  ) t
+             group by t.numero
+			having count(t.numero) = 2
 SQL;
         $bnd = array(
             'date' => $date,

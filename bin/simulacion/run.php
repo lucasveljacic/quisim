@@ -19,7 +19,7 @@ require_once realpath(__DIR__.'/../../').'/vendor/autoload.php';
 require_once realpath(__DIR__.'/../').'/signal_handler.php';
 
 $factory = new Quiniela_Simulation_Factory();
-$simulation = $factory->create(Quiniela_Simulation_Factory::NO_HAY_2_SIN_3);
+$simulation = $factory->create(Quiniela_Simulation_Factory::ULTIMO_ATRASADO);
 
 $dateTime = new DateTime($simulation->getInicioSimulacion());
 $dateTime->add(new DateInterval('P30D'));
